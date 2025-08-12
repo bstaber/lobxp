@@ -2,7 +2,7 @@ name: C++ / Spack / CTest
 
 on:
   push:
-    branches: [ main, master, develop, "**/kf/**" ]
+    branches: [ main ]
   pull_request:
     branches: [ "**" ]
 
@@ -42,7 +42,8 @@ jobs:
 
       - name: Concretize & install env (from spack.yaml)
         run: |
-          spack env activate -d .
+          spack env create lobxp ./spack.yaml
+          spack env activate lobxp
           spack concretize -f
           spack install -j $(nproc)
 
