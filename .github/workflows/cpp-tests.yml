@@ -52,6 +52,7 @@ jobs:
           spack find -dlv
 
       - name: Configure
+        shell: spack-bash {0}
         run: |
           spack env activate lobxp
           cmake -S . -B build -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
