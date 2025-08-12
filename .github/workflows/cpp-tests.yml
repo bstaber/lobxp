@@ -37,16 +37,15 @@ jobs:
       - name: Setup Spack
         uses: spack/setup-spack@v2
 
-      - name: Show Spack version
-        run: spack --version
-
-      - name: Concretize & install env (from spack.yaml)
+      - name: Concretize & install (from spack.yaml)
+        shell: bash
         run: |
-          spack env create lobxp ./spack.yaml
-          spack env activate lobxp
+          . "${SPACK_ROOT}/share/spack/setup-env.sh"
+          spack env activate -d .
           spack concretize -f
-          spack install -j $(nproc)
-
+          spack install -j "$(nproc)"
+          spack find -dlv
+          
       - name: List installed packages
         run: |
           spack env activate -d .
