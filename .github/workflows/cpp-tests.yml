@@ -35,9 +35,9 @@ jobs:
           fi
 
       - name: Setup CMake
-        uses: jwlawson/actions-setup-cmake@v2
-        with:
-          cmake-version: '3.22.1'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake
 
       - name: Setup Spack
         uses: spack/setup-spack@v2
