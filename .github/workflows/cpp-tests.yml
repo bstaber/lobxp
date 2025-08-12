@@ -40,7 +40,8 @@ jobs:
       - name: Concretize & install (from spack.yaml)
         shell: spack-bash {0}
         run: |
-          spack env activate -d .
+          spack env create lobxp ./spack.yaml
+          spack env activate lobxp
           spack concretize -f
           spack install -j "$(nproc)"
           spack find -dlv
