@@ -38,26 +38,19 @@ jobs:
         uses: spack/setup-spack@v2
 
       - name: Concretize & install (from spack.yaml)
-        shell: bash
+        shell: spack-bash {0}
         run: |
-          . "${SPACK_ROOT}/share/spack/setup-env.sh"
           spack env activate -d .
           spack concretize -f
           spack install -j "$(nproc)"
           spack find -dlv
-          
-      - name: List installed packages
-        run: |
-          spack env activate -d .
-          spack find -dlv
 
-      - name: Configure (CMake)
+      - name: Configure
         run: |
-          spack env activate -d .
           cmake -S . -B build -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
 
       - name: Build
         run: cmake --build build -j $(nproc)
 
-      - name: Test (CTest)
+      - name: Test
         run: ctest --test-dir build --output-on-failure
