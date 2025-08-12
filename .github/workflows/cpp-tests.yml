@@ -53,6 +53,7 @@ jobs:
 
       - name: Configure
         run: |
+          spack env activate lobxp
           cmake -S . -B build -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
 
       - name: Build
