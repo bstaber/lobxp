@@ -34,6 +34,11 @@ jobs:
             echo "CXX=g++"   >> $GITHUB_ENV
           fi
 
+      - name: Setup CMake
+        uses: jwlawson/actions-setup-cmake@v2
+        with:
+          cmake-version: '3.22.6'
+          
       - name: Setup Spack
         uses: spack/setup-spack@v2
 
