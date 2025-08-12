@@ -15,9 +15,13 @@ add_library(lobxp
     ${PROJECT_SOURCE_DIR}/src/lobxp/kalman_filter.cpp
 )
 target_include_directories(lobxp
-    PUBLIC ${PROJECT_SOURCE_DIR}/include
+    PUBLIC ${PROJECT_SOURCE_DIR}/include/
 )
 target_link_libraries(lobxp PUBLIC Eigen3::Eigen)
+
+# Tests
+enable_testing()
+add_subdirectory(tests)
 
 # # Example C++ executable
 # add_executable(kf_test src/kf_test.cpp)
