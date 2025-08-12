@@ -86,3 +86,25 @@ void KalmanFilter::update(const Vec& measurement)
     P_ = (I - K * H_) * P_ * (I - K * H_).transpose() + K * R_ * K.transpose();
 }
 
+void KalmanFilter::step(const std::optional<Vec>& measurement)
+{
+    // Predict the next state
+    predict();
+
+    // If a measurement is provided, update the state
+    // Otherwise, we just keep the predicted state
+    if (measurement.has_value()) {
+        update(measurement.value());
+    }
+}
+
+std::vector<Vec> KalmanFilter::filter(const std::vector<std::optional<Vec>>& measurements)
+{
+    std::vector<Vec> states;
+    states.reserve(measurements.size());
+    for (const auto& measurement : measurements) {
+        step(measurement);
+        states.push_back(x_);
+    }
+    return states;
+}

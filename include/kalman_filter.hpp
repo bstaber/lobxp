@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Eigen/Dense>
+#include <optional>
 
 /**
  * @brief Generic linear Kalman filter implementation.
@@ -37,9 +38,19 @@ public:
     */
     void update(const Vec& measurement);
 
+    /**
+     * @brief One-time step of the Kalman filter.
+    */
+    void step(const std::optional<Vec>& measurement);
+
+    /**
+     * @brief Filter a sequence of measurements.
+    */
+    std::vector<Vec> filter(const std::vector<std::optional<Vec>>& measurements);
+
     /// Accessors
-    [[nodiscard]] const Vec& state()      const noexcept { return x_; }
-    [[nodiscard]] const Mat& covariance() const noexcept { return P_; }
+    [[nodiscard]] const Vec& state()      const { return x_; }
+    [[nodiscard]] const Mat& covariance() const { return P_; }
 
 private:
     // === Model matrices ===
