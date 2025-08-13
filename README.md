@@ -20,3 +20,9 @@ just configure
 just build
 just test
 ```
+
+And if you want to install the python bindings, run
+
+```bash
+just install-bindings
+```

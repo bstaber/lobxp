@@ -1,17 +1,17 @@
 # Default target: build and run the demo
-default: build run
+default: configure build install-bindings test
 
 # Configure the project (only needed once or if CMakeLists.txt changes)
 configure:
-    cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+    cmake -S . -B cmake-build -DCMAKE_BUILD_TYPE=Release
 
 # Build the project
 build:
-    cmake --build build -j
+    cmake --build cmake-build -j
 
-# Run the Kalman filter demo
-run:
-    ./build/kf_demo
+# Install the Python bindings
+install-bindings:
+    cmake --install cmake-build
 
 # Run tests
 test:
@@ -19,7 +19,7 @@ test:
 
 # Clean the build folder
 clean:
-    rm -rf build
+    rm -rf cmake-build
 
 # Rebuild from scratch
 rebuild: clean configure build
