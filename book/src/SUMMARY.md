@@ -1,3 +1,5 @@
 - [Introduction](introduction.md)
-    - [Kalman filter](kalman_filter.md)
-    - [ML models]()
+- [Kalman filter](kalman_filter.md)
+    - [Class definition]()
+    - [Class implementation]()
+    - [Python bindings]()
