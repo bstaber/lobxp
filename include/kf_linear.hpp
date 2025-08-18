@@ -13,7 +13,7 @@
  * 
  * Here, we take B = 0 for simplicity.
  */
-class KalmanFilter {
+class KFLinear {
 public:
     using Vec = Eigen::VectorXd;
     using Mat = Eigen::MatrixXd;
@@ -21,7 +21,7 @@ public:
     /**
      * @brief Initialize state vector and covariance.
     */
-    KalmanFilter(const Vec& initial_state, 
+    KFLinear(const Vec& initial_state, 
                  const Mat& initial_covariance,
                  const Mat& transition_matrix,
                  const Mat& observation_matrix,

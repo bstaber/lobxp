@@ -1,4 +1,4 @@
-#include "kalman_filter.hpp"
+#include "kf_linear.hpp"
 
 #include <Eigen/Dense>
 #include <stdexcept>  // std::invalid_argument
@@ -7,7 +7,7 @@
 using Vec = Eigen::VectorXd;
 using Mat = Eigen::MatrixXd;
 
-KalmanFilter::KalmanFilter(const Vec& initial_state,
+KFLinear::KFLinear(const Vec& initial_state,
                            const Mat& initial_covariance,
                            const Mat& transition_matrix,
                            const Mat& observation_matrix,
@@ -49,7 +49,7 @@ KalmanFilter::KalmanFilter(const Vec& initial_state,
     R_ = measurement_covariance;
 }
 
-void KalmanFilter::predict()
+void KFLinear::predict()
 {
     // Predict state: x_k|k-1 = A * x_(k-1|k-1)
     x_ = A_ * x_;
@@ -58,7 +58,7 @@ void KalmanFilter::predict()
     P_ = A_ * P_ * A_.transpose() + Q_;
 }
 
-void KalmanFilter::update(const Vec& measurement)
+void KFLinear::update(const Vec& measurement)
 {
     if (measurement.size() != H_.rows()) {
         throw std::invalid_argument("Measurement size must match observation matrix H.");
@@ -86,7 +86,7 @@ void KalmanFilter::update(const Vec& measurement)
     P_ = (I - K * H_) * P_ * (I - K * H_).transpose() + K * R_ * K.transpose();
 }
 
-void KalmanFilter::step(const std::optional<Vec>& measurement)
+void KFLinear::step(const std::optional<Vec>& measurement)
 {
     // Predict the next state
     predict();
@@ -98,7 +98,7 @@ void KalmanFilter::step(const std::optional<Vec>& measurement)
     }
 }
 
-std::vector<Vec> KalmanFilter::filter(const std::vector<std::optional<Vec>>& measurements)
+std::vector<Vec> KFLinear::filter(const std::vector<std::optional<Vec>>& measurements)
 {
     std::vector<Vec> states;
     states.reserve(measurements.size());

@@ -15,7 +15,7 @@ install-bindings:
 
 # Run tests
 test:
-    ctest --test-dir build --output-on-failure
+    ctest --test-dir cmake-build --output-on-failure
 
 # Clean the build folder
 clean:

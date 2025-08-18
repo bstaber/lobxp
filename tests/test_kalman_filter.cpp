@@ -4,7 +4,7 @@
 #include <optional>
 #include <vector>
 
-#include "kalman_filter.hpp"
+#include "kf_linear.hpp"
 
 #include <catch2/catch_approx.hpp>
 using Catch::Approx;
@@ -23,32 +23,32 @@ TEST_CASE("Constructor validates dimensions")
     Mat R  = Mat::Identity(m, m);
 
     SECTION("Valid dims do not throw") {
-        REQUIRE_NOTHROW(KalmanFilter(x0, P0, A, H, Q, R));
+        REQUIRE_NOTHROW(KFLinear(x0, P0, A, H, Q, R));
     }
 
     SECTION("Bad P0 shape throws") {
         Mat badP = Mat::Identity(n+1, n+1);
-        REQUIRE_THROWS_AS(KalmanFilter(x0, badP, A, H, Q, R), std::invalid_argument);
+        REQUIRE_THROWS_AS(KFLinear(x0, badP, A, H, Q, R), std::invalid_argument);
     }
 
     SECTION("Bad A shape throws") {
         Mat badA = Mat::Identity(n+1, n+1);
-        REQUIRE_THROWS_AS(KalmanFilter(x0, P0, badA, H, Q, R), std::invalid_argument);
+        REQUIRE_THROWS_AS(KFLinear(x0, P0, badA, H, Q, R), std::invalid_argument);
     }
 
     SECTION("Bad H shape throws") {
         Mat badH = Mat::Ones(m, n+1);
-        REQUIRE_THROWS_AS(KalmanFilter(x0, P0, A, badH, Q, R), std::invalid_argument);
+        REQUIRE_THROWS_AS(KFLinear(x0, P0, A, badH, Q, R), std::invalid_argument);
     }
 
     SECTION("Bad Q shape throws") {
         Mat badQ = Mat::Identity(n+1, n+1);
-        REQUIRE_THROWS_AS(KalmanFilter(x0, P0, A, H, badQ, R), std::invalid_argument);
+        REQUIRE_THROWS_AS(KFLinear(x0, P0, A, H, badQ, R), std::invalid_argument);
     }
 
     SECTION("Bad R shape throws") {
         Mat badR = Mat::Identity(m+1, m+1);
-        REQUIRE_THROWS_AS(KalmanFilter(x0, P0, A, H, Q, badR), std::invalid_argument);
+        REQUIRE_THROWS_AS(KFLinear(x0, P0, A, H, Q, badR), std::invalid_argument);
     }
 }
 
@@ -64,7 +64,7 @@ TEST_CASE("Predict-only step leaves state at A*x and P -> A P A^T + Q")
     Mat Q  = 0.1 * Mat::Identity(n, n);
     Mat R  = Mat::Identity(m, m);
 
-    KalmanFilter kf(x0, P0, A, H, Q, R);
+    KFLinear kf(x0, P0, A, H, Q, R);
 
     kf.step(std::nullopt); // no measurement
 
@@ -87,7 +87,7 @@ TEST_CASE("Scalar KF update matches closed-form")
     Mat Q(n,n); Q << 0.25;    // process noise var
     Mat R(m,m); R << 1.0;     // measurement noise var
 
-    KalmanFilter kf(x0, P0, A, H, Q, R);
+    KFLinear kf(x0, P0, A, H, Q, R);
 
     // Step 1: no measurement
     kf.step(std::nullopt);
@@ -123,7 +123,7 @@ TEST_CASE("Batch filter handles missing and present measurements")
     Mat Q  = 0.01 * Mat::Identity(n, n);
     Mat R  = 0.25 * Mat::Identity(m, m);
 
-    KalmanFilter kf(x0, P0, A, H, Q, R);
+    KFLinear kf(x0, P0, A, H, Q, R);
 
     std::vector<std::optional<Vec>> zs;
     // t=1: no measurement
@@ -149,7 +149,7 @@ TEST_CASE("Update throws on measurement size mismatch")
     Mat Q  = Mat::Identity(n, n);
     Mat R  = Mat::Identity(m, m);
 
-    KalmanFilter kf(x0, P0, A, H, Q, R);
+    KFLinear kf(x0, P0, A, H, Q, R);
 
     Vec bad_measurement(2); bad_measurement << 1.0, 2.0;
     REQUIRE_THROWS_AS(kf.update(bad_measurement), std::invalid_argument);

@@ -13,7 +13,7 @@ find_package(pybind11 REQUIRED CONFIG)
 
 # Library
 add_library(lobxp
-    ${PROJECT_SOURCE_DIR}/src/lobxp/kalman_filter.cpp
+    ${PROJECT_SOURCE_DIR}/src/lobxp/kf_linear.cpp
 )
 target_include_directories(lobxp
     PUBLIC ${PROJECT_SOURCE_DIR}/include/
