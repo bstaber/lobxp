@@ -3,7 +3,7 @@ default: configure build install-bindings test
 
 # Configure the project (only needed once or if CMakeLists.txt changes)
 configure:
-    cmake -S . -B cmake-build -DCMAKE_BUILD_TYPE=Release
+    cmake -S . -B cmake-build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$HOME/.local
 
 # Build the project
 build:
